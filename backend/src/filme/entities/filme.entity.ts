@@ -1,8 +1,11 @@
+import { User } from '../../user/entities/user.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('filmes')
@@ -34,10 +37,10 @@ export class Filme {
   @Column({ type: 'text' })
   sinopse: string;
 
-  @Column({ type: 'real' })
+  @Column({ type: 'decimal', nullable: true })
   notaUsuario: number;
 
-  @Column({ type: 'varchar', length: 500, nullable: true }) // Ajuste o tipo e tamanho
+  @Column({ type: 'varchar', length: 500, nullable: true })
   posterUrl: string | null;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
@@ -45,4 +48,8 @@ export class Filme {
 
   @CreateDateColumn()
   dataAdicao: Date;
+
+  @ManyToOne(() => User, (user) => user.filmes, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
 }
