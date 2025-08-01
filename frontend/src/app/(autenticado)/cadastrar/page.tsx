@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import Link from 'next/link';
 import ContentContainer from '@/components/ContentContainer';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
@@ -8,7 +8,6 @@ import Button from '@/components/Button';
 import { FilmeData } from '@/types/filme.types';
 import { FilmeDetalhado } from '@/types/filme.types';
 import debounce from 'lodash.debounce';
-import { useCallback } from 'react';
 import MovieForm, { MovieFormDataType, MovieFormErrors} from '@/components/MovieForm';
 import api from '@/services/api';
 
@@ -112,11 +111,11 @@ export default function CadastrarPage() {
     };
 
     // Função de validação (será implementada na próxima etapa)
-    const validate = (): boolean => {
-    // Lógica de validação virá aqui.
-      setErrors({}); // Simula que não há erros por enquanto
-      return true; // Retorna true para permitir o save por enquanto
-    };
+    // const validate = (): boolean => {
+    // // Lógica de validação virá aqui.
+    //   setErrors({}); // Simula que não há erros por enquanto
+    //   return true; // Retorna true para permitir o save por enquanto
+    // };
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -161,9 +160,7 @@ export default function CadastrarPage() {
     };
     
 
-       
-   const debouncedFetchSuggestions = useCallback(
-      debounce(async (query: string) => {
+    const fetchSuggestions = useCallback(async (query: string) => {
         // A lógica de >= 3 caracteres deve estar no 'onChange' que chama esta função.
         // Mas podemos manter uma guarda aqui também por segurança.
         // Se a query for muito curta, não fazemos nada.
@@ -198,8 +195,11 @@ export default function CadastrarPage() {
         } finally {
           setLoadingSugestoes(false);
         }
-      }, 500), // 500ms de delay
-      [setSugestoes, setMostrarSugestoes, setLoadingSugestoes] // Dependências estáveis. Pode ser um array vazio [].
+      }, []);
+
+    const debouncedFetchSuggestions = useMemo(
+      () => debounce(fetchSuggestions, 500),
+      [fetchSuggestions]
     );
 
     const handleSugestaoClick = (sugestao: FilmeDetalhado) => {

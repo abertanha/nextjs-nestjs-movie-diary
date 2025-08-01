@@ -18,7 +18,7 @@ export default function LoginPage() {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData((prev: any) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +30,7 @@ export default function LoginPage() {
             await login(formData);
             // redirects to the first page as soon as the user signin
             router.push('/');
-        } catch ( err: any) {
+        } catch ( err: unknown) {
 
             // defines a friendly error msg for the user
             setError('Password or email are invalid, please try again.');
