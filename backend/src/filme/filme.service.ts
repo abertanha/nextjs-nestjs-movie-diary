@@ -18,6 +18,7 @@ import { Filme } from './entities/filme.entity';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class FilmeService {
@@ -30,51 +31,59 @@ export class FilmeService {
   ) {
     this.API_KEY = this.configService.get<string>('API_KEY');
     if (!this.API_KEY) {
-      console.error('API_KEY do TMDB não foi encontrada!');
+      console.error('TMDB API_KEY was not found!');
       throw new HttpException(
-        'TMDB API Key não encontrada',
+        'TMDB API Key not found!',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
 
-  async create(createFilmeDto: CreateFilmeDto): Promise<Filme> {
-    const novoFilme = this.filmeRepository.create(createFilmeDto);
-    return await this.filmeRepository.save(novoFilme);
+  async create(createFilmeDto: CreateFilmeDto, user: User): Promise<Filme> {
+    const newFilme = this.filmeRepository.create({
+      ...createFilmeDto,
+      user,
+    });
+    return await this.filmeRepository.save(newFilme);
   }
 
-  async findAll(): Promise<Filme[]> {
-    return await this.filmeRepository.find();
+  async findAll(user: User): Promise<Filme[]> {
+    return await this.filmeRepository.find({
+      where: { user: { id: user.id } },
+    });
   }
 
-  async findOne(id: string): Promise<Filme> {
-    const filmeEncontrado = await this.filmeRepository.findOneBy({ id });
+  async findOne(id: string, user: User): Promise<Filme> {
+    const foundMovie = await this.filmeRepository.findOne({
+      where: { id, user: { id: user.id } },
+    });
 
-    if (!filmeEncontrado) {
+    if (!foundMovie) {
       throw new HttpException(
-        `Filme com id: ${id} não encontrado!`,
+        `Movie with id: ${id} not found!`,
         HttpStatus.NOT_FOUND,
       );
     }
 
-    return filmeEncontrado;
+    return foundMovie;
   }
 
-  async update(id: string, dadosParaAtualizar: UpdateFilmeDto): Promise<Filme> {
-    await this.filmeRepository.update(id, dadosParaAtualizar);
-    return this.findOne(id);
+  async update(
+    id: string,
+    updateData: UpdateFilmeDto,
+    user: User,
+  ): Promise<Filme> {
+    const movie = await this.findOne(id, user);
+    const updatedMovie = this.filmeRepository.merge(movie, updateData);
+    return this.filmeRepository.save(updatedMovie);
   }
 
-  async remove(id: string): Promise<void> {
-    const result = await this.filmeRepository.delete(id);
+  async remove(id: string, user: User): Promise<void> {
+    const filme = await this.findOne(id, user);
 
-    if (result.affected === 0) {
-      throw new HttpException(
-        `Filme com id ${id} não encontrado`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
+    await this.filmeRepository.remove(filme);
   }
+
   async searchByTitleApi(query: string): Promise<FilmeApiResponse> {
     // url para chamada da api
     console.log(`Chamada a API TMDB para gerar uma sugestões com "${query}"`);

@@ -4,6 +4,9 @@ import { UserService } from '../user/user.service';
 import { scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { LoginDto } from './dto/login.dto';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { User } from 'src/user/entities/user.entity';
+import { LoginResponse } from './interfaces/auth.types';
 
 const scrypt = promisify(_scrypt);
 
@@ -34,10 +37,10 @@ export class AuthService {
 
     return result;
   }
-  async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+  async login(user: User): Promise<LoginResponse> {
+    const payload: JwtPayload = { email: user.email, sub: user.id };
     return {
-      access_token: await this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload),
     };
   }
 }
