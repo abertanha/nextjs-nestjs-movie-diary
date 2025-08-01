@@ -4,7 +4,7 @@ import React from "react";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
-    variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+    variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'logout';
     size?: 'sm' | 'md' | 'lg';
 }
 
@@ -22,6 +22,7 @@ export default function Button({
         secondary:
             'bg-neutral-600 hover:bg-neutral-700 text-neutral-100 focus:ring-neutral-500',
         danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500',
+        logout: 'bg-neutral-600 hover:bg-red-700 text-white focus:ring-red-500',
         ghost: 'bg-transparent hover:bg-neutral-700/50 text-neutral-100 focus:ring-neutral-500 border border-transparent hover:border-neutral-600'
     };
 

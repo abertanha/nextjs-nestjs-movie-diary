@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import BaseModal from "./BaseModal";
 import { FilmeData } from "@/types/filme.types";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import Button from "./Button";
-import MovieForm, { MovieFormDataType, MovieFormErrors } from './MovieForm';
+import Button from "../Button";
+import MovieForm, { MovieFormDataType, MovieFormErrors } from '../MovieForm';
 
 interface EditMovieModalProps {
     isOpen: boolean;

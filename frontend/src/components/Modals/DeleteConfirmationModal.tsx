@@ -3,7 +3,7 @@
 import React from "react";
 import BaseModal from "./BaseModal";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import Button from "./Button";
+import Button from "../Button";
 import { FilmeData } from "@/types/filme.types";
 
 interface DeleteConfirmationModalProps {
