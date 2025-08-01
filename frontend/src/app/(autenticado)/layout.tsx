@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/auth/ProtectedRoute";
 import BackgroundSetter from "@/components/BackgroundSetter";
 
 const backgroundImages = [
@@ -19,11 +20,11 @@ export default function AuthenticatedLayout({
     children: React.ReactNode;
 }) {
     return (
-        <>
-        <BackgroundSetter images={backgroundImages} />
-        <main className="relative z-10">
-            {children}
-        </main>
-        </>
+        <ProtectedRoute>
+            <BackgroundSetter images={backgroundImages} />
+            <main className="relative z-10">
+                {children}
+            </main>
+        </ProtectedRoute>
     );
 }

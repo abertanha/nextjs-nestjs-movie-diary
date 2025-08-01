@@ -10,7 +10,7 @@ import { FilmeDetalhado } from '@/types/filme.types';
 import debounce from 'lodash.debounce';
 import { useCallback } from 'react';
 import MovieForm, { MovieFormDataType, MovieFormErrors} from '@/components/MovieForm';
-import { API_BASE_URL } from '../../../api.config';
+import api from '@/services/api';
 
 
 type NewMovieFormData = Omit<FilmeData, 'id' | 'dataAdicao' | 'popularidade'>;
@@ -122,10 +122,12 @@ export default function CadastrarPage() {
       e.preventDefault();
       setSuccessMessage('');
       setSubmitError(null);
-      if (!validate()) {
-        console.log("Formulário de cadastro inválido", errors);
+      
+      if (!formData.titulo) {
+        setSubmitError('O campo Título é obrigatório.');
         return;
       }
+
       setIsSubmitting(true);
 
       const payload: NewMovieFormData = {
@@ -143,26 +145,15 @@ export default function CadastrarPage() {
       };
 
       try {
-        const response = await fetch(`${API_BASE_URL}/filme`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
+        const response = await api.post('/filme',payload);
 
-        if(!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        if(response.status === 201) {
+          setSuccessMessage(`Movie "${response.data.titulo}" successfully registered!`);
+          handleClearForm();
         }
-
-        const novoFilmeCadastrado: FilmeData = await response.json();
-        console.log('Filme cadastrado com sucesso:', novoFilmeCadastrado);
-        setSuccessMessage(`Filme "${novoFilmeCadastrado.titulo}" cadastrado com sucesso!`);
-        handleClearForm();
       } catch (e: unknown) {
-        console.error('Falha ao cadastrar filme:', e);
-        const errorMessage = e instanceof Error ? e.message : 'Erro desconhecido ao cadastrar.';
+        console.error('Failed to register the movie:', e);
+        const errorMessage = e instanceof Error ? e.message : 'Unknow error on registering the movie.';
         setSubmitError(errorMessage);
       } finally {
         setIsSubmitting(false);
@@ -185,15 +176,11 @@ export default function CadastrarPage() {
         setLoadingSugestoes(true);
 
         try {
-          const response = await fetch(
-            `${API_BASE_URL}/filme/tmdb/movie?titulo=${encodeURIComponent(query)}`
+          const response = await api.get(
+            `/filme/tmdb/movie?titulo=${encodeURIComponent(query)}`
           );
-          
-          if (!response.ok) {
-            throw new Error(`Erro na API: ${response.status}`);
-          }
 
-          const data = await response.json();
+          const data = response.data;
 
           if (data && data.data && data.data.results) {
             setSugestoes(data.data.results);
@@ -205,7 +192,7 @@ export default function CadastrarPage() {
           }
 
         } catch (error: unknown) {
-          console.error("Falha ao buscar sugestões de filmes:", error);
+          console.error("Failed on search movie sugestions:", error);
           setSugestoes([]);
           setMostrarSugestoes(true); // Mantém aberto para mostrar mensagem de erro se desejar
         } finally {

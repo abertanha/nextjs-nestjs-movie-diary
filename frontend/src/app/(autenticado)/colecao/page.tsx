@@ -6,15 +6,15 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import ContentContainer from "@/components/ContentContainer";
 import SearchInput from "@/components/SearchInput";
 import MovieCard from "@/components/MovieCard";
-import MovieDetailsModal from '@/components/MovieDetailsModal';
-import DeleteConfirmationModal from '@/components/DeleteConfirmationModal';
-import EditMovieModal from '@/components/EditMovieModal';
+import MovieDetailsModal from '@/components/Modals/MovieDetailsModal';
+import DeleteConfirmationModal from '@/components/Modals/DeleteConfirmationModal';
+import EditMovieModal from '@/components/Modals/EditMovieModal';
 import { FilmeData } from '@/types/filme.types';
-import { API_BASE_URL } from '../../../api.config';
+import api from '@/services/api';
 
 
 
-export default function Home() {
+export default function ColecaoPage() {
   const [movies, setMovies] = useState<FilmeData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,15 +40,11 @@ export default function Home() {
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_BASE_URL}/filme`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data: FilmeData[] = await response.json();
-        setMovies(data);
+        const response = await api.get('/filme');
+        setMovies(response.data);
       } catch (e: unknown) {
-        console.error("Falha ao buscar filmes:", e);
-        const errorMessage = e instanceof Error ? e.message : 'Erro ao carregar filmes.';
+        console.error("Faile to search for movies:", e);
+        const errorMessage = e instanceof Error ? e.message : 'Error on loading movies.';
         setError(errorMessage);
         setMovies([]);
       } finally {
@@ -100,30 +96,19 @@ export default function Home() {
     if (!updatedMovie || !updatedMovie.id) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/filme/${updatedMovie.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedMovie),
-      });
+      const response = await api.patch(`/filme/${updatedMovie.id}`, updatedMovie);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Falha ao atualizar o filme.');
-      }
-
-      const filmeSalvo: FilmeData = await response.json();
+      const filmeSalvo: FilmeData = response.data;
 
       setMovies(prevMovies =>
         prevMovies.map(movie =>
           movie.id === filmeSalvo.id ? filmeSalvo : movie
         )
       );
-      console.log('Filme atualizado com sucesso:', filmeSalvo.titulo);
+      console.log('Movie updated with sucess:', filmeSalvo.titulo);
 
     } catch (error: unknown) {
-      console.error("Erro ao atualizar o filme:", error);
+      console.error("Failed to update the movie:", error);
     } finally {
       handleCloseEditModal();
   }
@@ -147,17 +132,11 @@ export default function Home() {
    if (!movieToDelete) return;
 
     try{
-      const response = await fetch(`${API_BASE_URL}/filme/${movieToDelete.id}`, {
-        method: 'DELETE',
-      });
-      if(!response.ok){
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Falha ao deletar o filme.');
-      }
+      await api.delete(`/filme/${movieToDelete.id}`);
       setMovies(prevMovies => prevMovies.filter(movie => movie.id !== movieToDelete.id));
-      console.log('Filme deletado com sucesso:', movieToDelete.titulo);
+      console.log('Movie record deleted with sucess:', movieToDelete.titulo);
     } catch (error:unknown) {
-      console.error("Error ao deletar o filme:", error);
+      console.error("Error on deleting the movie:", error);
     } finally {
       handleCloseDeleteModal();
     }
