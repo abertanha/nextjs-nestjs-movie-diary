@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
 import { Filme } from './filme/entities/filme.entity';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { AuthModule } from './auth/auth.module';
     FilmeModule,
     UserModule,
     AuthModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,11 @@
 import { Filme } from '../../filme/entities/filme.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -14,4 +20,11 @@ export class User {
 
   @OneToMany(() => Filme, (filme) => filme.user)
   filmes: Filme[];
+
+  @Column({ default: false })
+  isEmailVerified: boolean;
+
+  @Column({ nullable: true })
+  @Index()
+  emailVerificationToken: string;
 }

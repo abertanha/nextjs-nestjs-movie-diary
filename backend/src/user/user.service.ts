@@ -5,6 +5,8 @@ import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { EmailService } from '../email/email.service';
+import { SendConfirmationDto } from '../email/dto/confirmation.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -13,14 +15,18 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly emailService: EmailService,
   ) {}
   /**
-   * Register a new user in the system with an encrypted password.
-   * Check if the email already exists before creating an account.
-   * The password is hashed using scrypt with a random salt for security.
+   * Registers a new user in the system and sends a verification email.
+   * - Checks if the email already exists to prevent duplicates.
+   * - Hashes the password using scrypt with a random salt for security.
+   * - Generates a unique email verification token.
+   * - Saves the new user with an 'unverified' status.
+   * - Calls the EmailService to send the confirmation link.
    * @param createUserDto The data for the new user to be created.
-   * @returns The data for the created user (without a password for security).
-   * @throws ConflictException If the email is already in use.
+   * @returns A promise that resolves to the created user's data (without the password).
+   * @throws HttpException (Conflict) If the email is already in use.
    */
   async create(createUserDto: CreateUserDto): Promise<Omit<User, 'password'>> {
     const userAlreadyRegistered = await this.findOneByEmail(
@@ -38,12 +44,26 @@ export class UserService {
     const hash = (await scrypt(createUserDto.password, salt, 32)) as Buffer;
     const saltAndHash = `${salt}.${hash.toString('hex')}`;
 
+    const emailVerificationToken = randomBytes(32).toString('hex');
+
     const dbUser = this.userRepository.create({
       ...createUserDto,
       password: saltAndHash,
+      emailVerificationToken,
     });
 
     const savedUser = await this.userRepository.save(dbUser);
+
+    try {
+      const confirmationDto: SendConfirmationDto = {
+        email: savedUser.email,
+        token: savedUser.emailVerificationToken,
+      };
+      await this.emailService.sendUserConfirmation(confirmationDto);
+    } catch (error) {
+      console.error('Failed to send the confirmation email:', error);
+    }
+
     console.log('Signed up', savedUser);
     const { password: _, ...result } = savedUser;
 
@@ -61,5 +81,30 @@ export class UserService {
       return undefined;
     }
     return user;
+  }
+  /**
+   * Finds a user by their email verification token and activates the account.
+   * On success, the user's 'isEmailVerified' flag is set to true,
+   * and the verification token is cleared to prevent reuse.
+   * @param token The email verification token to validate.
+   * @returns A promise that resolves to the updated User entity.
+   * @throws NotFoundException if no user is found with the provided token.
+   */
+  async activateUserAccount(token: string): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { emailVerificationToken: token },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'Invalid or expired verification Token.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = '';
+
+    return this.userRepository.save(user);
   }
 }
