@@ -5,10 +5,12 @@ import Button from "@/components/Button";
 import ContentContainer from "@/components/ContentContainer";
 import { RegisterFormInputs } from "@/types/auth.types";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CadastroPage() {
     const { register } = useAuth();
+    const router = useRouter()
     const [formData, setFormData] = useState<RegisterFormInputs>({
         email: '',
         password: '',
@@ -35,6 +37,7 @@ export default function CadastroPage() {
 
         try {
             await register(formData);
+            router.push('/check-email');
         } catch (err: unknown) {
             if (err instanceof Error && 'response' in err && (err as Error & { response: { status: number } }).response?.status === 409){
                 setError('Email already taken');
