@@ -110,20 +110,42 @@ export default function CadastrarPage() {
       titleInputRef.current?.focus();
     };
 
-    // Função de validação (será implementada na próxima etapa)
-    // const validate = (): boolean => {
-    // // Lógica de validação virá aqui.
-    //   setErrors({}); // Simula que não há erros por enquanto
-    //   return true; // Retorna true para permitir o save por enquanto
-    // };
+    const validate = (): boolean => {
+      const newErrors: MovieFormErrors = {};
+      const currentYear = new Date().getFullYear();
+      
+      // 1. title validation
+      if (!formData.titulo.trim()) {
+        newErrors.titulo = 'Movie title is mandatory.';
+      }
+
+      // 2. year validation
+      if (formData.ano && (formData.ano < 1888 || formData.ano > currentYear + 1)) {
+        newErrors.ano = `The year must be between 1888 and ${currentYear + 1}.`;
+      }
+
+      // 3. running time validation
+      if (formData.duracao && formData.duracao <= 0) {
+        newErrors.duracao = 'Duration must be a positive number in';
+      }
+
+      // 4. user note must be btw 0 and 5
+      if (formData.notaUsuario && (formData.notaUsuario < 0 || formData.notaUsuario > 5)) {
+        newErrors.notaUsuario = 'The note must not be less than 0 or greater than 5.';
+      }
+
+      setErrors(newErrors);
+
+      return Object.keys(newErrors).length === 0;
+    };
     
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       setSuccessMessage('');
       setSubmitError(null);
       
-      if (!formData.titulo) {
-        setSubmitError('O campo Título é obrigatório.');
+      const isFormValid = validate();
+      if (!isFormValid) {
         return;
       }
 
