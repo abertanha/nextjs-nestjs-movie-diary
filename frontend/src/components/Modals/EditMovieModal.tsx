@@ -6,6 +6,7 @@ import { FilmeData } from "@/types/filme.types";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
 import MovieForm, { MovieFormDataType, MovieFormErrors } from '../MovieForm';
+import { useTranslations } from "next-intl";
 
 interface EditMovieModalProps {
     isOpen: boolean;
@@ -21,6 +22,7 @@ export default function EditMovieModal({
     onSave,
     movie,
 }: EditMovieModalProps) {
+    const t = useTranslations('EditModal');
     const [formData, setFormData] = useState<MovieFormDataType | null>(null);
     const [originalMovieData, setOriginalMovieData] = useState<MovieFormDataType | null>(null);
     const [errors, setErrors] = useState<MovieFormErrors>({});
@@ -76,17 +78,42 @@ export default function EditMovieModal({
         setErrors({}); // Limpa erros ao resetar
     };
 
-    // Função de validação TO DO
+    // Função de validação
     const validate = (): boolean => {
-        setErrors({}); // Simula que não há erros por enquanto
-        return true; // Retorna true para permitir o save por enquanto
+          const newErrors: MovieFormErrors = {};
+          const currentYear = new Date().getFullYear();
+          
+          // 1. title validation
+          if (!formData.titulo.trim()) {
+            newErrors.titulo = 'Movie title is mandatory.';
+          }
+    
+          // 2. year validation
+          if (formData.ano && (formData.ano < 1888 || formData.ano > currentYear + 1)) {
+            newErrors.ano = `The year must be between 1888 and ${currentYear + 1}.`;
+          }
+    
+          // 3. running time validation
+          if (formData.duracao && formData.duracao <= 0) {
+            newErrors.duracao = 'Duration must be a positive number in';
+          }
+    
+          // 4. user note must be btw 0 and 5
+          if (formData.notaUsuario && (formData.notaUsuario < 0 || formData.notaUsuario > 5)) {
+            newErrors.notaUsuario = 'The note must not be less than 0 or greater than 5.';
+          }
+    
+          setErrors(newErrors);
+    
+          return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!validate()) { // Chama a validação
-            console.log("Formulário inválido", errors);
-            return; // Interrompe se houver erros
+        const isFormValid = validate();
+      
+        if (!isFormValid) {
+            return;
         }
         if (formData && movie) {
             const updatedMovie: FilmeData = {
@@ -128,7 +155,7 @@ export default function EditMovieModal({
                     <ArrowLeftIcon className="h-6 w-6 text-white" />
                 </button>
                 <h2 className="text-xl sm:text-2xl font-semibold text-center flex-grow pr-8 sm:pr-0">
-                    Editando: <span className="font-bold">{movieTitle}</span>
+                    { t('editing')} <span className="font-bold">{movieTitle}</span>
                 </h2>
             </div>
 
@@ -141,10 +168,10 @@ export default function EditMovieModal({
 
           <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-neutral-700 mt-6">
             <Button type="button" onClick={handleReset} variant="secondary" className="w-full sm:w-auto">
-              Resetar
+              { t('reset')}
             </Button>
             <Button type="submit" variant="primary" className="w-full sm:w-auto">
-              Salvar Alterações
+              {t('save')}
             </Button>
           </div>
         </form>

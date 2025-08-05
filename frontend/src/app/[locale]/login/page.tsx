@@ -7,8 +7,10 @@ import { LoginFormInputs } from "@/types/auth.types";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function LoginPage() {
+    const translations = useTranslations('LoginPage');
     const { login } = useAuth();
     const router = useRouter();
     const [formData, setFormData] = useState<LoginFormInputs>({
@@ -47,11 +49,11 @@ export default function LoginPage() {
         <div className="flex items-center justify-center min-h-screen">
             <ContentContainer className="w-full max-w-md">
                 <h1 className="text-3xl sm:text-4xl font-bold text-white text-center italic mb-8">
-                    Login
+                    {translations('title')}
                 </h1>
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="mb-4">
-                        <label htmlFor="email" className={labelBaseClass}>Email:</label>
+                        <label htmlFor="email" className={labelBaseClass}>{translations('emailLabel')}</label>
                         <input
                             type="email"
                             id="email"
@@ -63,7 +65,7 @@ export default function LoginPage() {
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="password" className={labelBaseClass}>Senha:</label>
+                        <label htmlFor="password" className={labelBaseClass}>{translations('passwordLabel')}</label>
                         <input
                             type="password"
                             id="password"
@@ -82,9 +84,9 @@ export default function LoginPage() {
                             {isSubmitting ? 'Entrando...' : 'Entrar'}
                         </Button>
                         <p className="text-sm text-neutral-400">
-                            Não tem conta?{' '}
+                            {translations('noAccount')}{' '}
                             <Link href="/cadastro" className="font-semibold text-sky-500 hover:text-sky-400">
-                                Cadastre-se
+                                {translations('signUpLink')}
                             </Link>
                         </p>
                     </div>

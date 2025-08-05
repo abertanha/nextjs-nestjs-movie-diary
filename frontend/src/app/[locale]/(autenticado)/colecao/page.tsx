@@ -11,10 +11,13 @@ import DeleteConfirmationModal from '@/components/Modals/DeleteConfirmationModal
 import EditMovieModal from '@/components/Modals/EditMovieModal';
 import { FilmeData } from '@/types/filme.types';
 import api from '@/services/api';
+import { useTranslations } from 'next-intl';
 
 
 
 export default function ColecaoPage() {
+  const t = useTranslations('ColecaoPage');
+
   const [movies, setMovies] = useState<FilmeData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -160,7 +163,7 @@ export default function ColecaoPage() {
               <ArrowLeftIcon className="h-6 w-6 text-white" />
           </Link>
           <h1 className="text-3xl font-bold text-center text-white sm:text-4xl italic flex-grow px-4">
-            Consultar
+            {t('title')}
           </h1>
           <div className="mt-4 flex justify-end">
             <SearchInput
@@ -169,8 +172,8 @@ export default function ColecaoPage() {
             />
           </div>
         </div>
-        {isLoading && <p className="text-center text-sky-400">Carregando filmes...</p>}
-          {error && <p className="text-center text-red-400">Erro: {error}</p>}
+        {isLoading && <p className="text-center text-sky-400">{t('loading')}</p>}
+          {error && <p className="text-center text-red-400">{t('error')} {error}</p>}
           {!isLoading && !error && filteredMovies.length > 0 && (
             <div className="grid flex-grow grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 sm:gap-6">
               {filteredMovies.map((movie) => (
@@ -190,7 +193,7 @@ export default function ColecaoPage() {
           )}
           {!isLoading && !error && filteredMovies.length === 0 && (
             <p className="text-center text-neutral-400 flex-grow flex items-center justify-center">
-              Nenhum filme cadastrado ou encontrado.
+              {t('empty')}
             </p>
         )}
       </ContentContainer>

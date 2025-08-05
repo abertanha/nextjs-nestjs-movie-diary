@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
 export interface MovieFormDataType {
@@ -43,6 +44,7 @@ export default function MovieForm({
   onTitleInput,
   hideTitleField = false
 }: MovieFormProps) {
+  const t = useTranslations('MovieForm');
   const inputBaseClass = "w-full p-2.5 bg-neutral-800 border border-neutral-700 rounded-md text-white placeholder-neutral-500 focus:ring-sky-500 focus:border-sky-500 focus:outline-none";
   const labelBaseClass = "block mb-1.5 text-sm font-medium text-neutral-300";
 
@@ -51,7 +53,7 @@ export default function MovieForm({
       {/* Título */}
       {!hideTitleField && (
         <div>
-          <label htmlFor="titulo" className={labelBaseClass}>Título:</label>
+          <label htmlFor="titulo" className={labelBaseClass}>{t('title')}</label>
           <input
             type="text"
             name="titulo"
@@ -74,7 +76,7 @@ export default function MovieForm({
       {/* Layout de duas colunas para Diretor e Ano */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label htmlFor="diretor" className={labelBaseClass}>Diretor:</label>
+          <label htmlFor="diretor" className={labelBaseClass}>{t('director')}</label>
           <input
             type="text" name="diretor" id="diretor"
             value={formData.diretor} onChange={handleInputChange}
@@ -83,7 +85,7 @@ export default function MovieForm({
           {errors.diretor && <p className="mt-1 text-xs text-red-400">{errors.diretor}</p>}
         </div>
         <div>
-          <label htmlFor="ano" className={labelBaseClass}>Ano:</label>
+          <label htmlFor="ano" className={labelBaseClass}>{t('year')}</label>
           <input
             type="number" name="ano" id="ano"
             value={formData.ano ?? ''}
@@ -98,7 +100,7 @@ export default function MovieForm({
       {/* Layout de duas colunas para Gênero e Duração */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label htmlFor="genero" className={labelBaseClass}>Gênero:</label>
+          <label htmlFor="genero" className={labelBaseClass}>{t('genre')}</label>
           <input
             type="text" name="genero" id="genero"
             value={formData.genero} onChange={handleInputChange}
@@ -107,7 +109,7 @@ export default function MovieForm({
           {errors.genero && <p className="mt-1 text-xs text-red-400">{errors.genero}</p>}
         </div>
         <div>
-          <label htmlFor="duracao" className={labelBaseClass}>Duração (minutos):</label>
+          <label htmlFor="duracao" className={labelBaseClass}>{t('duration')}</label>
           <input
             type="number" name="duracao" id="duracao"
             value={formData.duracao ?? ''}
@@ -121,7 +123,7 @@ export default function MovieForm({
 
       {/* Elenco */}
       <div>
-        <label htmlFor="elenco" className={labelBaseClass}>Elenco (separado por vírgulas):</label>
+        <label htmlFor="elenco" className={labelBaseClass}>{t('cast')}</label>
         <input
           type="text" name="elenco" id="elenco"
           value={formData.elenco} onChange={handleInputChange}
@@ -132,7 +134,7 @@ export default function MovieForm({
 
       {/* Classificação */}
       <div>
-        <label htmlFor="classificacao" className={labelBaseClass}>Classificação Etária:</label>
+        <label htmlFor="classificacao" className={labelBaseClass}>{t('classification')}</label>
         <input
           type="text" name="classificacao" id="classificacao"
           value={formData.classificacao} onChange={handleInputChange}
@@ -144,7 +146,7 @@ export default function MovieForm({
 
       {/* Sinopse */}
       <div>
-        <label htmlFor="sinopse" className={labelBaseClass}>Sinopse:</label>
+        <label htmlFor="sinopse" className={labelBaseClass}>{t('synopsis')}</label>
         <textarea
           name="sinopse" id="sinopse" rows={4}
           value={formData.sinopse} onChange={handleInputChange}
@@ -155,7 +157,7 @@ export default function MovieForm({
 
       {/* Nota do Usuário */}
       <div>
-        <label htmlFor="notaUsuario" className={labelBaseClass}>Sua Nota (0 a 5):</label>
+        <label htmlFor="notaUsuario" className={labelBaseClass}>{t('rate')}</label>
         <input
           type="number" name="notaUsuario" id="notaUsuario"
           value={formData.notaUsuario ?? ''} onChange={handleInputChange}

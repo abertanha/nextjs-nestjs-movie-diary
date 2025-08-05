@@ -4,11 +4,14 @@ import { useAuth } from "@/auth/AuthContext";
 import Button from "@/components/Button";
 import ContentContainer from "@/components/ContentContainer";
 import { RegisterFormInputs } from "@/types/auth.types";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CadastroPage() {
+    const t = useTranslations('CadastroPage');
+
     const { register } = useAuth();
     const router = useRouter()
     const [formData, setFormData] = useState<RegisterFormInputs>({
@@ -57,7 +60,7 @@ export default function CadastroPage() {
         <div className="flex items-center justify-center min-h-screen">
             <ContentContainer className="w-full max-w-md">
                 <h1 className="text-3xl sm:text-4xl font-bold text-white text-center italic mb-8">
-                    Create Account
+                    {t('title')}
                 </h1>
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="mb-4">
@@ -73,7 +76,7 @@ export default function CadastroPage() {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password" className={labelBaseClass}>Password with at least 8 characters.:</label>
+                        <label htmlFor="password" className={labelBaseClass}>{t('passwordWarning') }</label>
                         <input
                             type="password"
                             id="password"
@@ -86,7 +89,7 @@ export default function CadastroPage() {
                         />
                     </div>
                     <div className="mb-6">
-                        <label htmlFor="confirmPassword" className={labelBaseClass}>Confirm password:</label>
+                        <label htmlFor="confirmPassword" className={labelBaseClass}>{t('confirmPass')}</label>
                         <input
                             type="password"
                             id="confirmPassword"
@@ -106,9 +109,9 @@ export default function CadastroPage() {
                             {isSubmitting ? 'Registering...' : 'Register'}
                         </Button>
                         <p className="text-sm text-neutral-400">
-                            already signed up?{' '}
+                            { t('alreadyUser')}{' '}
                             <Link href="/login" className="font-semibold text-sky-500 hover:text-sky-400">
-                                Please sing in!
+                                {t('plsSignIn')}
                             </Link>
                         </p>
                     </div>

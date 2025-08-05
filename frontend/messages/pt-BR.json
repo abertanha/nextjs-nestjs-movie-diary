@@ -1,0 +1,88 @@
+{
+  "LoginPage": {
+    "title": "Entrar",
+    "emailLabel": "E-mail:",
+    "passwordLabel": "Senha:",
+    "buttonText": "Entrar",
+    "noAccount": "Não tem uma conta?",
+    "signUpLink": "Cadastre-se"
+  },
+  "CadastroPage": {
+    "title": "Criar Conta",
+    "passwordWarning": "Senha com pelo menos 8 caracteres",
+    "confirmPass": "Confirme a senha",
+    "alreadyUser": "Já é cadastrado?",
+    "plsSignIn": "Por favor, inscreva-se!"
+  },
+  "CheckEmail": {
+    "almost": "Quase lá!",
+    "sent": "Enviamos para seu e-mail um link de verificação.",
+    "click": "Por favor, clique no link para ativar sua conta.",
+    "back": "Voltar para página de login."
+  },
+  "VerifyEmail": { "loading": "carregando..." },
+  "TokenVerification": {
+    "acc": "Verificando sua conta",
+    "login": "Para entrar",
+    "error": "Token de verificação não encontrado. Por favor, verifique o link.",
+    "success": "Email verificado com sucesso.Você agora pode logar.",
+    "secondError": "Falha no processo de verificação. O link pode ser inválido ou expirado."
+  },
+  "MenuPage": {
+    "title": "Diário de Cinéfilo",
+    "subtitle": "Sua coleção pessoal de filmes.",
+    "welcome": "Bem-vindo,",
+    "viewCollection": "Consultar Coleção",
+    "addMovie": "Adicionar Filme",
+    "logout": "Sair"
+  },
+  "ColecaoPage": {
+    "title": "Sua Coleção",
+    "addMovie": "Adicionar Filme",
+    "loading": "Carregando sua coleção...",
+    "error": "Não foi possível carregar sua coleção. Tente novamente mais tarde.",
+    "empty": "Sua coleção está vazia.",
+    "empty_prompt": "Que tal adicionar o primeiro filme?"
+  },
+  "CadastrarPage": {
+    "title": "Nova Entrada",
+    "movieTitle": "Título",
+    "searching": "buscando...",
+    "clear": "Limpar Entrada",
+    "saving": "Salvando...",
+    "save": "Salvar Entrada"
+  },
+  "MovieForm": {
+    "title": "Título:",
+    "director": "Diretor:",
+    "year": "Ano:",
+    "genre": "Gênero:",
+    "duration": "Duração (minutos):",
+    "cast": "Elenco (separado por vírgulas):",
+    "classification": "Classificação Etária:",
+    "synopsis": "Sinopse:",
+    "rate": "Sua Nota (0 a 5):"
+  },
+  "DeleteModal": {
+    "confirm": "Confirmar Exclusão",
+    "doYouConfirm": "Você confirma a exclusão de ",
+    "yourDiary": "do seu diário de filmes assistidos?",
+    "cancel": "Cancelar",
+    "delete": "Excluir"
+  },
+  "DetailsModal": {
+    "minutes": "min",
+    "synopsis": "Sinopse:",
+    "director": "Diretor:",
+    "genre": "Gênero:",
+    "cast": "Elenco:",
+    "rate": "Sua Nota (0 a 5):",
+    "added": "Adicionado em:"
+  },
+  "EditModal": {
+    "editing": "Editando: ",
+    "reset": "Resetar",
+    "save": "Salvar Alterações"
+  },
+  "SearchInput": { "placeholder": "busca por título" }
+}

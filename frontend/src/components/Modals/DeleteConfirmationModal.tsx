@@ -5,6 +5,7 @@ import BaseModal from "./BaseModal";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
 import { FilmeData } from "@/types/filme.types";
+import { useTranslations } from "next-intl";
 
 interface DeleteConfirmationModalProps {
     isOpen: boolean;
@@ -22,7 +23,7 @@ export default function DeleteConfirmationModal({
     if (!movie && isOpen) {
         console.warn('[DeleteModal] Aberto, mas sem dados do filme para exibir a mensagem.'); 
     }
-
+    const t = useTranslations('DeleteModal');
     const movieTitle = movie?.titulo;
     const modalOverallBgWithOpacity = 'bg-neutral-900/85';
 
@@ -66,11 +67,11 @@ export default function DeleteConfirmationModal({
                     </button>
                     <div className="text-center">
                         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-white">
-                            Confirmar Exclusão
+                            {t('confirm')}
                         </h2>
                         <p className="text-sm sm:text-base text-neutral-300 mb-6 sm:mb-8">
-                            Você confirma a exclusão de <strong className="font-semibold text-white"> {movieTitle} </strong>
-                            do seu diário de filmes assistidos?
+                            {t('doYouConfirm')} <strong className="font-semibold text-white"> {movieTitle} </strong>
+                            {t('yourDiary')}
                         </p>
                         <div className="flex flex-clo sm:flex-row justify-center gap-3 sm:gap-4">
                             <Button
@@ -78,14 +79,14 @@ export default function DeleteConfirmationModal({
                                 variant="secondary"
                                 className="w-full sm:w-auto"
                             >
-                                Cancelar
+                                {t('cancel')}
                             </Button>
                             <Button
                                 onClick={onConfirm}
                                 variant="danger"
                                 className="w-full sm:w-auto"
                             >
-                                Excluir
+                                {t('delete')}
                             </Button>
                         </div>
                     </div>

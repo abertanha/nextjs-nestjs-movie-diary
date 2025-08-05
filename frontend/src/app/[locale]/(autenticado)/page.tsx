@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react';
 import Button from '@/components/Button';
 import { useAuth } from '@/auth/AuthContext';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { useTranslations } from 'next-intl';
 
 export default function MenuPage() {
+  const t = useTranslations('MenuPage');
   const { user, logout, isLoading } = useAuth();
   const [showContent, setShowContent] = useState(false);
 
@@ -45,9 +47,9 @@ export default function MenuPage() {
         `}
         >
         <div className="mb-10 sm:mb-12">
-          <h1 className="text-5xl lg:text-6xl font-bold mb-3 italic">Diário de filmes</h1>
+          <h1 className="text-5xl lg:text-6xl font-bold mb-3 italic">{t('title')}</h1>
           <p className="text-lg sm:text-xl text-neutral-300 px-2">
-            Bem-vindo, <span className="font-semibold text-white">{user?.email}</span>
+            {t('welcome')} <span className="font-semibold text-white">{user?.email}</span>
           </p>
         </div>
 
@@ -74,7 +76,7 @@ export default function MenuPage() {
                 className="object-contain group-hover:opacity-80 transition-opacity"
               />
             </div>
-            <span className="font-semibold text-md sm:text-lg">Nova entrada</span>
+            <span className="font-semibold text-md sm:text-lg">{t('addMovie')}</span>
           </Link>
         
           <Link 
@@ -99,12 +101,12 @@ export default function MenuPage() {
                 className="object-contain group-hover:opacity-80 transition-opacity"
               />
             </div>
-            <span className="font-semibold text-md sm:text-lg">Consultar</span>
+            <span className="font-semibold text-md sm:text-lg">{t('viewCollection')}</span>
           </Link>
         </div>
         <div className='w-full max-w-xs'>
           <Button onClick={logout} variant='logout' className='w-2/5'>
-            Sair
+            {t('logout')}
           </Button>
         </div>
         </ContentContainer>

@@ -5,6 +5,7 @@ import BaseModal from './BaseModal';
 import { FilmeData } from '@/types/filme.types'; 
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface MovieDetailsModalProps {
     isOpen: boolean;
@@ -17,6 +18,8 @@ export default function MovieDetailsModal({
     onClose,
     movie,
 }: MovieDetailsModalProps) {
+    const t = useTranslations('DetailsModal');
+    
     if (!movie) {
         return null;
     }
@@ -106,23 +109,23 @@ export default function MovieDetailsModal({
                             </h2>
                             <p className="text-sm text-neutral-400 mb-4">
                                 {movie.ano && <span>{movie.ano}</span>}
-                                {movie.duracao && <span className="ml-2">&bull; {movie.duracao} min</span>}
+                                {movie.duracao && <span className="ml-2">&bull; {movie.duracao} { t('minutes')}</span>}
                                 {movie.classificacao && <span className="ml-2">&bull; {movie.classificacao}</span>}
                             </p>
 
                             {movie.sinopse && (
                                 <div className="mb-4">
-                                    <h3 className="text-lg font-semibold mb-1">Sinopse</h3>
+                                    <h3 className="text-lg font-semibold mb-1">{ t('synopsis')}</h3>
                                     <p className="text-neutral-300 text-sm leading-relaxed text-justify">{movie.sinopse}</p>
                                 </div>
                             )}
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm mt-4">
-                                {movie.diretor && <div><strong className="font-semibold text-neutral-200 block mb-0.5">Diretor:</strong> <span className="text-neutral-300">{movie.diretor}</span></div>}
-                                {movie.genero && <div><strong className="font-semibold text-neutral-200 block mb-0.5">Gênero:</strong> <span className="text-neutral-300">{movie.genero}</span></div>}
-                                {movie.elenco && <div className="sm:col-span-2"><strong className="font-semibold text-neutral-200 block mb-0.5">Elenco:</strong> <span className="text-neutral-300">{movie.elenco}</span></div>}
-                                {movie.notaUsuario && <div><strong className="font-semibold text-neutral-200 block mb-0.5">Sua Nota:</strong> <span className="text-neutral-300">{movie.notaUsuario}/5</span></div>}
-                                {movie.dataAdicao && <div><strong className="font-semibold text-neutral-200 block mb-0.5">Adicionado em:</strong> <span className="text-neutral-300">{new Date(movie.dataAdicao).toLocaleDateString('pt-BR')}</span></div>}
+                                {movie.diretor && <div><strong className="font-semibold text-neutral-200 block mb-0.5">{ t('director')}</strong> <span className="text-neutral-300">{movie.diretor}</span></div>}
+                                {movie.genero && <div><strong className="font-semibold text-neutral-200 block mb-0.5">{ t('genre')}</strong> <span className="text-neutral-300">{movie.genero}</span></div>}
+                                {movie.elenco && <div className="sm:col-span-2"><strong className="font-semibold text-neutral-200 block mb-0.5">{ t('cast')}</strong> <span className="text-neutral-300">{movie.elenco}</span></div>}
+                                {movie.notaUsuario && <div><strong className="font-semibold text-neutral-200 block mb-0.5">{ t('rate')}</strong> <span className="text-neutral-300">{movie.notaUsuario}/5</span></div>}
+                                {movie.dataAdicao && <div><strong className="font-semibold text-neutral-200 block mb-0.5">{ t('added')}</strong> <span className="text-neutral-300">{new Date(movie.dataAdicao).toLocaleDateString('pt-BR')}</span></div>}
                             </div>    
                         </div>
                     </div>

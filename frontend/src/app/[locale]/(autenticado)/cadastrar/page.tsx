@@ -10,6 +10,7 @@ import { FilmeDetalhado } from '@/types/filme.types';
 import debounce from 'lodash.debounce';
 import MovieForm, { MovieFormDataType, MovieFormErrors} from '@/components/MovieForm';
 import api from '@/services/api';
+import { useTranslations } from 'next-intl';
 
 
 type NewMovieFormData = Omit<FilmeData, 'id' | 'dataAdicao' | 'popularidade'>;
@@ -30,6 +31,7 @@ const initialFormData: NewMovieFormData = {
   
 
 export default function CadastrarPage() {
+    const t = useTranslations('CadastrarPage');
     const [formData, setFormData] = useState<NewMovieFormData>(initialFormData);
     const titleInputRef = useRef<HTMLInputElement>(null); 
     const [sugestoes, setSugestoes] = useState<FilmeDetalhado[]>([]);
@@ -145,6 +147,7 @@ export default function CadastrarPage() {
       setSubmitError(null);
       
       const isFormValid = validate();
+      
       if (!isFormValid) {
         return;
       }
@@ -258,13 +261,13 @@ export default function CadastrarPage() {
               <ArrowLeftIcon className="h-6 w-6 text-white" />
             </Link>
             <h1 className="text-3xl sm:text-4xl font-bold text-white text-center italic">
-              Nova Entrada
+              { t('title')}
             </h1>
           </div>
 
           <form onSubmit={handleSubmit} className="flex-grow overflow-y-auto pr-1">
             <div className="relative mb-5" ref={suggestionsContainerRef}>
-              <label htmlFor="titulo" className={labelBaseClass}>Título:</label>
+              <label htmlFor="titulo" className={labelBaseClass}>{ t('movieTitle')}</label>
               <input
                   type="text"
                   name="titulo"
@@ -281,7 +284,7 @@ export default function CadastrarPage() {
               {errors.titulo && <p className="mt-1 text-xs text-red-400">{errors.titulo}</p>}
 
               {loadingSugestoes && ( 
-              <div className="absolute mt-1 text-sm text-sky-400/80 text-center italic font-bold"> buscando... </div> )}
+              <div className="absolute mt-1 text-sm text-sky-400/80 text-center italic font-bold"> {t('searching')} </div> )}
               {!loadingSugestoes && mostrarSugestoes && sugestoes.length > 0 && (
                 <ul className="absolute top-full left-0 right-0 z-10 mt-1 bg-neutral-800 border border-neutral-700 rounded-md shadow-lg max-h-72 overflow-y-auto">
                   {sugestoes.map((sugestao, index) => (
@@ -307,10 +310,10 @@ export default function CadastrarPage() {
             {successMessage && <p className="my-2 text-sm text-center text-green-400">{successMessage}</p>}
             <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 mt-6 border-t border-neutral-700">
               <Button type="button" onClick={handleClearForm} variant="secondary" className="w-full sm:w-auto">
-                Limpar Entrada
+                { t('clear')}
               </Button>
               <Button type="submit" variant="primary" className="w-full sm:w-auto" disabled={isSubmitting}>
-                {isSubmitting ? 'Salvando...' : 'Salvar Entrada'}
+                {isSubmitting ? t('saving') : t('save')}
               </Button>
             </div>
           </form>

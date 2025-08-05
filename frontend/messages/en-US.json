@@ -1,0 +1,88 @@
+{
+  "LoginPage": {
+    "title": "Login",
+    "emailLabel": "Email:",
+    "passwordLabel": "Password:",
+    "buttonText": "Sign In",
+    "noAccount": "Don't have an account?",
+    "signUpLink": "Sign up"
+  },
+  "CadastroPage": {
+    "title": "Create Account",
+    "passwordWarning": "Password with at least 8 characters.:",
+    "confirmPass": "Confirm password:",
+    "alreadyUser": "already signed up?",
+    "plsSignIn": "Please sing in!"
+  },
+  "CheckEmail": {
+    "almost": "Almost there!",
+    "sent": "We sent to your email an verification link.",
+    "click": "Please, click in the link to activate your account.",
+    "back": "Back to the login page."
+  },
+  "VerifyEmail": { "loading": "loading..." },
+  "TokenVerification": {
+    "acc": "Account verification",
+    "login": "To Login",
+    "error": "Verification token not found. Please, verify the link.",
+    "success": "Email verified successfully! You can now log in.",
+    "secondError": "Fail in the verification process. The link might be invalid or expired."
+  },
+  "MenuPage": {
+    "title": "Movie Diary",
+    "subtitle": "Your personal film collection.",
+    "welcome": "Welcome,",
+    "viewCollection": "View Collection",
+    "addMovie": "Add Movie",
+    "logout": "Logout"
+  },
+  "ColecaoPage": {
+    "title": "Your Collection",
+    "addMovie": "Add Movie",
+    "loading": "Loading your collection...",
+    "error": "Could not load your collection. Please try again later.",
+    "empty": "Your collection is empty.",
+    "empty_prompt": "How about adding the first movie?"
+  },
+  "CadastrarPage": {
+    "title": "New Entry",
+    "movieTitle": "Title:",
+    "searching": "searching...",
+    "clear": "Clear entry",
+    "saving": "Saving...",
+    "save": "Save entry"
+  },
+  "MovieForm": {
+    "title": "Title:",
+    "director": "Director:",
+    "year": "Year:",
+    "genre": "Genre:",
+    "duration": "Duration (minutes):",
+    "cast": "Cast (split by comma):",
+    "classification": "Age classificatiion:",
+    "synopsis": "Synopsis:",
+    "rate": "Your Rate (0 a 5):"
+  },
+  "DeleteModal": {
+    "confirm": "Confirm delete",
+    "doYouConfirm": "Do your confirm the delete of ",
+    "yourDiary": "from your movie's diary?",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "DetailsModal": {
+    "minutes": "min",
+    "synopsis": "Synopsis:",
+    "director": "Director:",
+    "genre": "Genre:",
+    "cast": "Cast:",
+    "rate": "Your Rate (0 a 5): ",
+    "added": "Added in: "
+  },
+  "EditModal": {
+    "editing": "Editing: ",
+    "reset": "Reset",
+    "save": "Save Changes"
+  },
+  "SearchInput": { "placeholder": "search by title" }
+}

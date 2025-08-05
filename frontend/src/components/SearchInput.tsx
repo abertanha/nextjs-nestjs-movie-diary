@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
+import { useTranslations } from 'next-intl';
 
 interface SearchInputProps {
     onSearchChange?: (query: string) => void; //TODO front-back
@@ -9,6 +10,7 @@ interface SearchInputProps {
 }
 
 export default function SearchInput({ onSearchChange, className='' }: SearchInputProps) {
+    const t = useTranslations('SearchInput');
     const [query, setQuery] = useState('');
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +27,7 @@ export default function SearchInput({ onSearchChange, className='' }: SearchInpu
                 type="text"
                 value={query}
                 onChange={handleInputChange}
-                placeholder='busca por título'
+                placeholder={t('placeholder')}
                 className="
                     w-full
                     py-1.5 pl-10 pr-4
